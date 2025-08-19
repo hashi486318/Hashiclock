@@ -77,15 +77,31 @@
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       for (let num = 1; num <= 12; num++) {
-          let ang = num * Math.PI / 6;
-          let x = Math.sin(ang) * (radius * 0.75);
-          let y = -Math.cos(ang) * (radius * 0.75);
-          ctx.fillStyle = 'white';
-          ctx.strokeStyle = 'black';
-          ctx.lineWidth = radius * 0.01;
-          ctx.fillText(num.toString(), x, y);
-          ctx.strokeText(num.toString(), x, y);
-      }
+      let ang = num * Math.PI / 6;
+
+      // 短い目盛り線
+      let innerRadius = radius * 0.85; // 内側のスタート位置
+      let outerRadius = radius * 0.90; // 外側の終了位置
+      let x1 = Math.sin(ang) * innerRadius;
+      let y1 = -Math.cos(ang) * innerRadius;
+      let x2 = Math.sin(ang) * outerRadius;
+      let y2 = -Math.cos(ang) * outerRadius;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.lineWidth = 4; // 線の太さ
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
+
+      // 数字描画
+      let x = Math.sin(ang) * (radius * 0.75);
+      let y = -Math.cos(ang) * (radius * 0.75);
+      ctx.fillStyle = 'white';
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = radius * 0.01;
+      ctx.fillText(num.toString(), x, y);
+      ctx.strokeText(num.toString(), x, y);
+    }
 
       const now = new Date();
       let h = now.getHours()%12;
