@@ -1,0 +1,16 @@
+{
+  "name": "何の変哲もない時計",
+  "short_name": "何の変哲もない時計",
+  "icons": [
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}
+}
