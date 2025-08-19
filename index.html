@@ -17,8 +17,9 @@
     #clock-container {
       position: relative;
       font-size: 9em;
-      line-height: 1; /* 文字と反射をぴったり */
+      line-height: 1;
       text-align: center;
+      z-index: 10;
     }
 
     #clock {
@@ -27,36 +28,117 @@
       margin: 0;
     }
 
-    #reflection {
-      color: rgba(0,0,0,0.2);
-      transform: scaleY(-1);
-      filter: blur(2px);
-      opacity: 0.5;
-      position: absolute;
-      top: 100%; /* 時計のすぐ下に配置 */
-      left: 0;
-      width: 100%;
-      margin: 0;
+    #analog-bg {
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      opacity:0.05;
+      z-index:1;
     }
   </style>
 </head>
 <body>
+  <canvas id="analog-bg" width="1000" height="1000"></canvas>
   <div id="clock-container">
     <div id="clock"></div>
-    <div id="reflection"></div>
   </div>
 
   <script>
-    const clock = document.getElementById("clock");
-    const reflection = document.getElementById("reflection");
+    const canvas = document.getElementById('analog-bg');
+    const ctx = canvas.getContext('2d');
+    const radius = canvas.width / 2;
 
-    function updateClock() {
+    function drawAnalogClock() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      ctx.save();
+      ctx.translate(radius,radius);
+
+      const outerLineWidth = radius * 0.02; // メイン縁
+      const decorationLineWidth = radius * 0.01; // 外装飾円
+
+      // メイン縁
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 0.95 - outerLineWidth/2, 0, 2 * Math.PI);
+      ctx.lineWidth = outerLineWidth;
+      ctx.strokeStyle = 'black';
+      ctx.stroke();
+
+      // 外装飾円
+      ctx.beginPath();
+      ctx.arc(0, 0, radius * 1.02 - decorationLineWidth/2, 0, 2 * Math.PI);
+      ctx.lineWidth = decorationLineWidth;
+      ctx.strokeStyle = 'gray';
+      ctx.stroke();
+
+      // 数字描画
+      ctx.font = radius * 0.12 + "px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      for (let num = 1; num <= 12; num++) {
+          let ang = num * Math.PI / 6;
+          let x = Math.sin(ang) * (radius * 0.75);
+          let y = -Math.cos(ang) * (radius * 0.75);
+          ctx.fillStyle = 'white';
+          ctx.strokeStyle = 'black';
+          ctx.lineWidth = radius * 0.01;
+          ctx.fillText(num.toString(), x, y);
+          ctx.strokeText(num.toString(), x, y);
+      }
+
       const now = new Date();
-      const time = now.toLocaleTimeString();
-      clock.textContent = time;
-      reflection.textContent = time;
+      let h = now.getHours()%12;
+      let m = now.getMinutes();
+      let s = now.getSeconds();
+
+      // 短針
+      ctx.save();
+      ctx.rotate((h*30 + m*0.5)*Math.PI/180);
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(-5, -radius*0.45);
+      ctx.lineTo(0, -radius*0.5);
+      ctx.lineTo(5, -radius*0.45);
+      ctx.closePath();
+      ctx.fillStyle = 'black';
+      ctx.fill();
+      ctx.restore();
+
+      // 長針
+      ctx.save();
+      ctx.rotate((m*6)*Math.PI/180);
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(-4, -radius*0.65);
+      ctx.lineTo(0, -radius*0.7);
+      ctx.lineTo(4, -radius*0.65);
+      ctx.closePath();
+      ctx.fillStyle = 'black';
+      ctx.fill();
+      ctx.restore();
+
+      // 秒針
+      ctx.save();
+      ctx.rotate((s*6)*Math.PI/180);
+      ctx.beginPath();
+      ctx.moveTo(0,0);
+      ctx.lineTo(0,-radius*0.75);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle='red';
+      ctx.stroke();
+      ctx.restore();
+
+      ctx.restore();
     }
 
+    setInterval(drawAnalogClock,1000);
+
+    // デジタル時計
+    const clock = document.getElementById("clock");
+    function updateClock() {
+      clock.textContent = new Date().toLocaleTimeString();
+    }
     updateClock();
     setInterval(updateClock, 1000);
   </script>
