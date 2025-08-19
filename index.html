@@ -14,28 +14,31 @@
       font-family: Arial, sans-serif;
       background: #fff;
     }
-    
+
     #clock {
       font-size: 9em;
       color: #000;
-      text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+      text-align: center;
       position: relative;
     }
 
     #reflection {
       font-size: 9em;
       color: rgba(0,0,0,0.2);
-      transform: scaleY(-1);
-      filter: blur(2px);
+      position: absolute;
+      top: 0; /* 時計にくっつける */
+      left: 0;
+      transform: scaleY(-1); /* 上下反転 */
       opacity: 0.5;
-      margin-top: -0.1em;
-      position: relative;
+      pointer-events: none;
     }
   </style>
 </head>
 <body>
-  <div id="clock"></div>
-  <div id="reflection"></div>
+  <div id="clock-container" style="position: relative;">
+    <div id="clock"></div>
+    <div id="reflection"></div>
+  </div>
 
   <script>
     const clock = document.getElementById("clock");
@@ -48,11 +51,13 @@
       reflection.textContent = time;
     }
 
-    let start = Date.now();
     function animateReflection() {
-      const t = (Date.now() - start) / 200; // 波の速さ
-      const offset = Math.sin(t) * 5; // 揺れ幅
-      reflection.style.transform = `scaleY(-1) translateY(${offset}px)`;
+      const t = Date.now() / 500; // 波の速さ
+      const blur = 2 + Math.sin(t) * 2;      // ぼかしの強さ
+      const offsetX = 5 + Math.sin(t) * 3;   // 右斜めのXずれ
+      const offsetY = 5 + Math.cos(t) * 3;   // 下方向のYずれ
+      reflection.style.filter = `blur(${blur}px)`;
+      reflection.style.transform = `scaleY(-1) translate(${offsetX}px, ${offsetY}px)`;
       requestAnimationFrame(animateReflection);
     }
 
