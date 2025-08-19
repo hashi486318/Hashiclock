@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>何の変哲もない時計</title>
+  <title>なんの変哲もない時計</title>
   <style>
     body {
       display: flex;
@@ -16,29 +16,26 @@
     }
 
     #clock {
-      font-size: 9em;
+      font-size: 9em;  /* 文字サイズ */
       color: #000;
       text-align: center;
-      position: relative;
+      text-shadow: 4px 4px 8px rgba(0,0,0,0.5); /* 固定の影 */
     }
 
     #reflection {
       font-size: 9em;
       color: rgba(0,0,0,0.2);
-      position: absolute;
-      top: 0; /* 時計にくっつける */
-      left: 0;
       transform: scaleY(-1); /* 上下反転 */
+      filter: blur(2px);
       opacity: 0.5;
-      pointer-events: none;
+      margin-top: -0.1em;   /* 文字にくっつける */
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <div id="clock-container" style="position: relative;">
-    <div id="clock"></div>
-    <div id="reflection"></div>
-  </div>
+  <div id="clock"></div>
+  <div id="reflection"></div>
 
   <script>
     const clock = document.getElementById("clock");
@@ -51,19 +48,8 @@
       reflection.textContent = time;
     }
 
-    function animateReflection() {
-      const t = Date.now() / 500; // 波の速さ
-      const blur = 2 + Math.sin(t) * 2;      // ぼかしの強さ
-      const offsetX = 5 + Math.sin(t) * 3;   // 右斜めのXずれ
-      const offsetY = 5 + Math.cos(t) * 3;   // 下方向のYずれ
-      reflection.style.filter = `blur(${blur}px)`;
-      reflection.style.transform = `scaleY(-1) translate(${offsetX}px, ${offsetY}px)`;
-      requestAnimationFrame(animateReflection);
-    }
-
     updateClock();
     setInterval(updateClock, 1000);
-    animateReflection();
   </script>
 </body>
 </html>
