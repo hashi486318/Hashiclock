@@ -42,6 +42,7 @@
   <canvas id="analog-bg" width="1000" height="1000"></canvas>
   <div id="clock-container">
     <div id="clock"></div>
+    <div id="ampm" style="font-size:0.6em; color:#000; text-align:center; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); margin-top:-0.2em;"></div>
   </div>
 
   <script>
@@ -152,9 +153,24 @@
 
     // デジタル時計
     const clock = document.getElementById("clock");
+    const ampmDiv = document.getElementById("ampm");
+
     function updateClock() {
-      clock.textContent = new Date().toLocaleTimeString();
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = now.getMinutes();
+      const seconds = now.getSeconds();
+  
+      const ampm = hours >= 12 ? "PM" : "AM";
+      ampmDiv.textContent = ampm;
+
+      hours = hours % 12;
+      if (hours === 0) hours = 12;
+
+      const timeStr = `${hours.toString().padStart(2,'0')}:${minutes.toString().padStart(2,'0')}:${seconds.toString().padStart(2,'0')}`;
+      clock.textContent = timeStr;
     }
+
     updateClock();
     setInterval(updateClock, 1000);
   </script>
