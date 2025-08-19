@@ -60,20 +60,20 @@
 
       // メイン縁
       ctx.beginPath();
-      ctx.arc(0, 0, radius * 0.95 - outerLineWidth/2, 0, 2 * Math.PI);
+      ctx.arc(0, 0, radius * 0.90 - outerLineWidth/2, 0, 2 * Math.PI);
       ctx.lineWidth = outerLineWidth;
       ctx.strokeStyle = 'black';
       ctx.stroke();
 
       // 外装飾円
       ctx.beginPath();
-      ctx.arc(0, 0, radius * 1.02 - decorationLineWidth/2, 0, 2 * Math.PI);
+      ctx.arc(0, 0, radius * 0.98 - decorationLineWidth/2, 0, 2 * Math.PI);
       ctx.lineWidth = decorationLineWidth;
       ctx.strokeStyle = 'gray';
       ctx.stroke();
 
       // 数字描画
-      ctx.font = radius * 0.12 + "px Arial";
+      ctx.font = radius * 0.14 + "px Arial";
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       for (let num = 1; num <= 12; num++) {
