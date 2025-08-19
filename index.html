@@ -8,30 +8,57 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       height: 100vh;
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #fff; /* 背景を白に変更 */
-      color: #000;       /* 文字を黒に変更 */
-      font-size: 9em;   /* 文字サイズを大きく */
+      background: #fff;
     }
+    
     #clock {
-      text-align: center;
+      font-size: 12em;
+      color: #000;
       text-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    #reflection {
+      font-size: 12em;
+      color: rgba(0,0,0,0.2);
+      transform: scaleY(-1);
+      filter: blur(2px);
+      opacity: 0.5;
+      margin-top: -0.1em;
+      position: relative;
     }
   </style>
 </head>
 <body>
   <div id="clock"></div>
+  <div id="reflection"></div>
 
   <script>
+    const clock = document.getElementById("clock");
+    const reflection = document.getElementById("reflection");
+
     function updateClock() {
       const now = new Date();
       const time = now.toLocaleTimeString();
-      document.getElementById("clock").textContent = time;
+      clock.textContent = time;
+      reflection.textContent = time;
     }
-    setInterval(updateClock, 1000);
+
+    let start = Date.now();
+    function animateReflection() {
+      const t = (Date.now() - start) / 200; // 波の速さ
+      const offset = Math.sin(t) * 5; // 揺れ幅
+      reflection.style.transform = `scaleY(-1) translateY(${offset}px)`;
+      requestAnimationFrame(animateReflection);
+    }
+
     updateClock();
+    setInterval(updateClock, 1000);
+    animateReflection();
   </script>
 </body>
 </html>
