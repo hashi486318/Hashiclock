@@ -3,7 +3,7 @@
   "short_name": "何の変哲もない時計",
   "icons": [
     {
-      "src": "favicon.png",
+      "src": "icon.png",
       "sizes": "512x512",
       "type": "image/png"
     }
